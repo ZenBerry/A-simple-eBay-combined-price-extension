@@ -1,5 +1,4 @@
-
-![Screenshot 2026-02-10 at 6 08 21 am](https://github.com/user-attachments/assets/f8081fbd-4d71-4975-a984-03d5c0092933)
+<img src="https://github.com/user-attachments/assets/f8081fbd-4d71-4975-a984-03d5c0092933" alt="drawing" width="500"/>
 
 How to run
 
