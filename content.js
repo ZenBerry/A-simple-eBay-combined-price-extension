@@ -58,13 +58,17 @@
 
     priceEl.parentElement.insertBefore(totalEl, priceEl);
 
+    let baseStyle = null;
+    if (shippingInfo?.el) {
+      baseStyle = getComputedStyle(shippingInfo.el);
+    }
+
     if (!container.hasAttribute(CONTAINER_RESTYLE_ATTR)) {
-      if (shippingInfo?.el) {
-        const shippingStyle = getComputedStyle(shippingInfo.el);
-        container.style.color = shippingStyle.color;
-        container.style.fontWeight = shippingStyle.fontWeight;
-        container.style.fontSize = shippingStyle.fontSize;
-        container.style.lineHeight = shippingStyle.lineHeight;
+      if (baseStyle) {
+        container.style.color = baseStyle.color;
+        container.style.fontWeight = baseStyle.fontWeight;
+        container.style.fontSize = baseStyle.fontSize;
+        container.style.lineHeight = baseStyle.lineHeight;
       } else {
         container.style.color = '#6b6b6b';
         container.style.fontWeight = '400';
@@ -74,10 +78,15 @@
       container.setAttribute(CONTAINER_RESTYLE_ATTR, 'true');
     }
 
-    priceEl.style.color = 'inherit';
-    priceEl.style.fontWeight = 'inherit';
-    priceEl.style.fontSize = 'inherit';
-    priceEl.style.lineHeight = 'inherit';
+    const priceColor = baseStyle?.color || '#6b6b6b';
+    const priceWeight = baseStyle?.fontWeight || '400';
+    const priceSize = baseStyle?.fontSize || '0.95em';
+    const priceLine = baseStyle?.lineHeight || '1.2';
+
+    priceEl.style.setProperty('color', priceColor, 'important');
+    priceEl.style.setProperty('font-weight', priceWeight, 'important');
+    priceEl.style.setProperty('font-size', priceSize, 'important');
+    priceEl.style.setProperty('line-height', priceLine, 'important');
   };
 
   const processAll = () => {
