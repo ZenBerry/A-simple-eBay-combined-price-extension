@@ -1,0 +1,12 @@
+{
+  "manifest_version": 3,
+  "name": "eBay Combined Price",
+  "version": "1.0.0",
+  "description": "Show eBay price + shipping as a single combined total.",
+  "content_scripts": [
+    {
+      "matches": ["*://*.ebay.com/*"],
+      "js": ["content.js"]
+    }
+  ]
+}
