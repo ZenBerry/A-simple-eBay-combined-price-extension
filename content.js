@@ -2,6 +2,7 @@
   const CONTAINER_SELECTOR = '.su-card-container__attributes__primary';
   const PRICE_SELECTOR = '.s-card__price';
   const TOTAL_CLASS = 'combined-total-price';
+  const CONTAINER_RESTYLE_ATTR = 'data-combined-container-restyled';
 
   const parseMoney = (text) => {
     if (!text) return null;
@@ -20,7 +21,7 @@
       const text = row.textContent || '';
       if (!/delivery|shipping/i.test(text)) continue;
       const money = parseMoney(text);
-      if (money) return money;
+      if (money) return { money, el: row };
     }
     return null;
   };
@@ -38,7 +39,8 @@
     const price = parseMoney(priceEl.textContent || '');
     if (!price) return;
 
-    const shipping = findShipping(container);
+    const shippingInfo = findShipping(container);
+    const shipping = shippingInfo?.money;
     const shippingValue = shipping ? shipping.value : 0;
     const currency = shipping?.currency || price.currency;
 
@@ -50,11 +52,32 @@
     totalEl.style.display = 'block';
     totalEl.style.color = '#1a9c2d';
     totalEl.style.fontWeight = '700';
-    totalEl.style.fontSize = '2.5em';
-    totalEl.style.lineHeight = '1.1';
+    totalEl.style.fontSize = '2em';
+    totalEl.style.lineHeight = '1';
     totalEl.style.marginBottom = '2px';
 
     priceEl.parentElement.insertBefore(totalEl, priceEl);
+
+    if (!container.hasAttribute(CONTAINER_RESTYLE_ATTR)) {
+      if (shippingInfo?.el) {
+        const shippingStyle = getComputedStyle(shippingInfo.el);
+        container.style.color = shippingStyle.color;
+        container.style.fontWeight = shippingStyle.fontWeight;
+        container.style.fontSize = shippingStyle.fontSize;
+        container.style.lineHeight = shippingStyle.lineHeight;
+      } else {
+        container.style.color = '#6b6b6b';
+        container.style.fontWeight = '400';
+        container.style.fontSize = '0.95em';
+        container.style.lineHeight = '1.2';
+      }
+      container.setAttribute(CONTAINER_RESTYLE_ATTR, 'true');
+    }
+
+    priceEl.style.color = 'inherit';
+    priceEl.style.fontWeight = 'inherit';
+    priceEl.style.fontSize = 'inherit';
+    priceEl.style.lineHeight = 'inherit';
   };
 
   const processAll = () => {
