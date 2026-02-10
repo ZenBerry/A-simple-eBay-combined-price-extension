@@ -33,7 +33,8 @@
   const addCombinedTotal = (container) => {
     if (container.querySelector(`.${TOTAL_CLASS}`)) return;
 
-    const priceEl = container.querySelector(PRICE_SELECTOR);
+    const priceEls = Array.from(container.querySelectorAll(PRICE_SELECTOR));
+    const priceEl = priceEls.find((el) => parseMoney(el.textContent || ''));
     if (!priceEl) return;
 
     const price = parseMoney(priceEl.textContent || '');
@@ -83,10 +84,12 @@
     const priceSize = baseStyle?.fontSize || '0.95em';
     const priceLine = baseStyle?.lineHeight || '1.2';
 
-    priceEl.style.setProperty('color', priceColor, 'important');
-    priceEl.style.setProperty('font-weight', priceWeight, 'important');
-    priceEl.style.setProperty('font-size', priceSize, 'important');
-    priceEl.style.setProperty('line-height', priceLine, 'important');
+    for (const el of priceEls) {
+      el.style.setProperty('color', priceColor, 'important');
+      el.style.setProperty('font-weight', priceWeight, 'important');
+      el.style.setProperty('font-size', priceSize, 'important');
+      el.style.setProperty('line-height', priceLine, 'important');
+    }
   };
 
   const processAll = () => {
